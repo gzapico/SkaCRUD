@@ -1,0 +1,18 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "resource",
+    "_partials": []
+}
+**** END PROPERTIES SKAFFOLDER ****
+/* 
+ * ADD HERE YOUR CUSTOMIZAZION, 
+ * THESE WILL OVERRIDE DEFAULT SERVICES 
+ * THIS FILE WILL BE NEVER OVERWRITTEN BY SKAFFOLDER
+ * 
+ */
+
+{{resource.name}}Service = app.factory('{{resource.name}}ServiceCustom', ['$rootScope', function($rootScope){
+  return {
+	  //WRITE HERE YOUR CUSTOM SERVICE
+	};
+  }]);

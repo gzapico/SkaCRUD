@@ -1,0 +1,76 @@
+// START - USED SERVICES		
+// END - USED SERVICES
+
+// START - REQUIRED RESOURCES		
+// END - REQUIRED RESOURCES
+
+app.controller('{{module.name}}Controller', ['$scope', '$location', '$routeParams', '$q'{{#each module._resources}}, '{{name}}Service'{{/each}}{{#each crudResource._relations}}{{#equal _ent1.name ../crudResource.name}}, '{{_ent2._resource.name}}Service'{{/equal}}{{/each}}{{#each crudResource._relations}}{{#notEqual _ent1.name ../crudResource.name}}, '{{_ent1._resource.name}}Service'{{/notEqual}}{{/each}},
+    function ($scope, $location, $routeParams, $q{{#each module._resources}}, {{name}}Service {{/each}}{{#each crudResource._relations}}{{#equal _ent1.name ../crudResource.name}}, {{_ent2._resource.name}}Service{{/equal}}{{/each}}{{#each crudResource._relations}}{{#notEqual _ent1.name ../crudResource.name}}, {{_ent1._resource.name}}Service{{/notEqual}}{{/each}}) {
+
+    	//manage create and save
+		$scope.external = {};
+		
+    	if ($routeParams.id != 'new')
+    	{
+        	$scope.id = $routeParams.id;
+        	$scope.obj = {{crudResource.name}}Service.get({_id: $scope.id});
+        	{{#each crudResource._relations}}{{#notEqual _ent1.name ../crudResource.name}}$scope.external._{{_ent1._resource.name}}{{name}} = {{_ent1._resource.name}}Service.findBy{{name}}({key: $scope.id});
+        	{{/notEqual}}{{/each}}
+    	}
+    	else{
+    		$scope.obj = new {{crudResource.name}}Service();
+        	{{#each crudResource._relations}}{{#notEqual _ent1.name ../crudResource.name}}$scope.external._{{_ent1._resource.name}}{{name}} = [];
+        	{{/notEqual}}{{/each}}
+    	}
+    	
+    	$scope.save = function(){
+    		$scope.obj.$save().then(function(data){
+    			$scope.obj=data;
+        		$location.path('{{linkUrl}}');
+    		});
+    	}
+    	
+    	$scope.remove = function(){
+    		{{crudResource.name}}Service.remove({_id: $scope.obj._id}).$promise.then(function(){
+				$('#removeModal').modal('hide');
+				$('.modal-backdrop').remove();
+				$('.modal-open').removeClass("modal-open");
+        		$location.path('{{linkUrl}}');
+    		});
+    	}
+    	
+    	{{#each crudResource._relations}}
+    		{{#equal _ent1._id ../crudResource._entity._id}}
+    		
+        //manage relation {{name}}
+        		
+    	$scope.list_{{_ent2._resource.name}} = {{_ent2._resource.name}}Service.query();
+
+				{{#equal type 'm:m'}}
+    	$scope.contain_{{_ent2._resource.name}} = function(item){
+    		if (!$scope.obj.{{name}}) return false;
+    		return $scope.obj.{{name}}.indexOf(item) != -1;
+    	}
+		    	
+		$scope.add_{{_ent2._resource.name}} = function(item){
+			if(!$scope.obj.{{name}})
+				$scope.obj.{{name}} = [];
+			$scope.obj.{{name}}.push(item);
+		}
+		
+		$scope.remove_{{_ent2._resource.name}} = function(index){
+			$scope.obj.{{name}}.splice(index, 1);
+		}
+				{{/equal}}
+    		{{/equal}}
+    	{{/each}}
+    	{{#each crudResource._relations}}
+    		{{#notEqual _ent1._id ../crudResource._entity._id}}
+    		
+        //manage External relation {{name}}
+        		
+    	$scope.list_{{_ent1._resource.name}}{{name}} = {{_ent1._resource.name}}Service.query();
+    	
+    		{{/notEqual}}
+    	{{/each}}
+}]);

@@ -1,0 +1,15 @@
+// START - USED SERVICES		
+// END - USED SERVICES
+
+// START - REQUIRED RESOURCES		
+// END - REQUIRED RESOURCES
+
+
+//CRUD LIST FOR {{crudResource}}
+
+app.controller('{{module.name}}Controller', ['$scope'{{#each module._resources}}, '{{name}}Service'{{/each}},
+    function ($scope{{#each module._resources}}, {{name}}Service {{/each}}) {
+		
+    	$scope.list = {{crudResource.name}}Service.query();
+    	
+}]);

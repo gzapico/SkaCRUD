@@ -1,0 +1,278 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "resource",
+    "overwrite": true,
+    "_partials": []
+}
+**** END PROPERTIES SKAFFOLDER ****
+<?php
+	require_once './db/db{{db.name}}Manager.php';
+	
+/*
+ * SCHEMA DB {{resource._entity.name}}
+ * 
+	{
+		{{#resource._entity._attrs}}
+		{{name}}: {
+			type: '{{type}}'{{#required}}, 
+			required : true{{/required}}{{#unique}},
+			unique : true, {{/unique}}{{#if _enum}},
+			enum : {{#joinObj _enum 'name'}}{{/joinObj}}, {{/if}}
+		},
+		{{/resource._entity._attrs}}
+		//RELAZIONI
+		{{#resource._entity._relations}}
+			{{#equal _ent1.name ../name}}
+		{{name}}: {{#equal type 'm:m'}}[{{/equal}}{
+			type: Schema.ObjectId{{#required}}, 
+			required : true{{/required}},
+			ref : "{{_ent2.name}}"
+		}{{#equal type 'm:m'}}]{{/equal}},
+			{{/equal}}
+		{{/resource._entity._relations}}
+		
+		
+		//RELAZIONI ESTERNE
+		
+		{{#resource._entity._relations}}
+			{{#notEqual _ent1.name ../name}}
+		{{name}}: {{#equal type 'm:m'}}[{{/equal}}{
+			type: Schema.ObjectId{{#required}}, 
+			required : true{{/required}},
+			ref : "{{_ent1.name}}"
+		}{{#equal type 'm:m'}}]{{/equal}},
+			{{/notEqual}}
+		{{/resource._entity._relations}}
+		
+	}
+ * 
+ */
+
+
+//CRUD METHODS
+
+{{#each resource._services}}
+	{{#equal crudAction 'list'}}
+	
+//CRUD - GET LIST
+
+$app->get('{{../resource.url}}{{#editUrlParam url}}{{/editUrlParam}}',	function () use ($app){
+	makeQuery("SELECT * FROM {{lowercase ../resource._entity.name}}");
+});
+
+	{{/equal}}
+	{{#equal crudAction 'get'}}
+	
+//CRUD - GET ONE
+	
+$app->get('{{../resource.url}}{{#editUrlParam url}}{{/editUrlParam}}',	function ($id) use ($app){
+	$params = array (
+		'id'	=> $id,
+	);
+	
+	$obj = makeQuery("SELECT * FROM {{lowercase ../resource._entity.name}} WHERE _id = :id LIMIT 1", $params, false);
+	
+	{{#each ../resource._relations}}{{#equal type "m:m"}}{{#equal _ent1.name ../../resource/name}}
+	$list_{{name}} = makeQuery("SELECT id_{{_ent2.name}} FROM {{_ent1.name}}_{{name}} WHERE id_{{_ent1.name}} = :id", $params, false);
+	$list_{{name}}_Array=[];
+	foreach ($list_{{name}} as $val) {
+		array_push($list_{{name}}_Array, $val->id_{{_ent2.name}});
+	}
+	$obj->{{name}} = $list_{{name}}_Array;
+	
+	{{/equal}}{{/equal}}{{/each}}
+	
+	echo json_encode($obj);
+	
+});
+	
+	{{/equal}}
+	{{#equal crudAction 'update'}}
+
+//CRUD - EDIT
+
+$app->post('{{../resource.url}}{{#editUrlParam url}}{{/editUrlParam}}',	function ($id) use ($app){
+
+	$body = json_decode($app->request()->getBody());
+	
+	$params = array (
+		'id'	=> $id{{#each ../resource._entity._attrs}},
+		'{{name}}'	    => {{#if required}}$body->{{name}}{{/if}}{{#isEmptyNull required}}isset($body->{{name}})?$body->{{name}}:''{{/isEmptyNull}}{{/each}}{{#each ../resource._relations}}{{#equal type '1:m'}}{{#equal _ent1.name ../../resource._entity.name}},
+		'{{name}}'      => {{#if required}}$body->{{name}}{{/if}}{{#isEmptyNull required}}isset($body->{{name}})?$body->{{name}}:'' {{/isEmptyNull}}{{/equal}}{{/equal}}
+		{{/each}}
+	);
+
+	$obj = makeQuery("UPDATE {{lowercase ../resource._entity.name}} SET {{#each ../resource._entity._attrs}} {{name}} = :{{name}}{{#isNotLast ../../resource._entity._attrs @index}},{{/isNotLast}} {{/each}} {{#each ../resource._relations}}{{#equal type '1:m'}}{{#equal _ent1.name ../../resource._entity.name}}, {{name}}=:{{name}} {{/equal}}{{/equal}}{{/each}} WHERE _id = :id LIMIT 1", $params, false);
+    {{#each ../resource._relations}}
+    {{#equal type "m:m"}}{{#equal _ent1.name ../../resource/name}}
+	// Delete not in array
+	$in = " and id_{{_ent2.name}} NOT IN (:{{name}})";
+	$sql = "DELETE FROM {{_ent1.name}}_{{name}} WHERE id_{{_ent1.name}}=:id_{{_ent1.name}} ";
+	
+	$params = array (
+		'id_{{_ent1.name}}'	=> $body->_id
+	);
+	
+	if (isset($body->{{name}}) && $body->{{name}} != null && sizeOf($body->{{name}}) > 0) {
+		$sql = $sql.$in;
+		$params['{{name}}'] = join("', '", $body->{{name}});
+	}
+	
+	makeQuery($sql, $params, false);
+	
+	
+	// Get actual
+	$sql="SELECT id_{{_ent2.name}} FROM {{_ent1.name}}_{{name}} WHERE id_{{_ent1.name}}=:id";
+	$params = array (
+		'id'	=> $body->_id,
+	);
+    $actual = makeQuery($sql, $params, false);
+	$actualArray=[];
+	foreach ($actual as $val) {
+		array_push($actualArray, $val->id_{{_ent2.name}});
+	}
+
+	// Insert new
+	if (isset($body->{{name}})) {
+    	foreach ($body->{{name}} as $id_{{_ent2.name}}) {
+    		if (!in_array($id_{{_ent2.name}}, $actualArray)){
+    			$sql = "INSERT INTO {{_ent1.name}}_{{name}} (_id, id_{{_ent1.name}}, id_{{_ent2.name}} ) VALUES (null, :id_{{_ent1.name}}, :id_{{_ent2.name}})";
+    
+    			$params = array (
+    				'id_{{_ent1.name}}'	=> $body->_id,
+    				'id_{{_ent2.name}}'	=> $id_{{_ent2.name}}
+    			);
+        		makeQuery($sql, $params, false);
+    		}
+    	}
+	}
+	
+	{{/equal}}{{/equal}}{{/each}}
+	
+	echo json_encode($body);
+    	
+});
+	{{/equal}}
+	{{#equal crudAction 'delete'}}
+	
+//CRUD - REMOVE
+
+$app->delete('{{../resource.url}}{{#editUrlParam url}}{{/editUrlParam}}',	function ($id) use ($app){
+	
+	$params = array (
+		'id'	=> $id,
+	);
+
+	makeQuery("DELETE FROM {{lowercase ../resource._entity.name}} WHERE _id = :id LIMIT 1", $params);
+
+});
+	{{/equal}}
+	{{#equal crudAction 'create'}}
+
+//CRUD - CREATE
+
+
+$app->post('{{../resource.url}}{{#editUrlParam url}}{{/editUrlParam}}',	function () use ($app){
+
+	$body = json_decode($app->request()->getBody());
+	
+	$params = array (
+		{{#each ../resource._entity._attrs}}
+		'{{name}}'	=> {{#if required}}$body->{{name}}{{/if}}{{#isEmptyNull required}}isset($body->{{name}})?$body->{{name}}:''{{/isEmptyNull}},
+		{{/each}}
+		{{#each ../resource._relations}}{{#equal type '1:m'}}{{#equal _ent1.name ../../resource._entity.name}}
+		'{{name}}' => {{#if required}}$body->{{name}}{{/if}}{{#isEmptyNull required}}isset($body->{{name}})?$body->{{name}}:''{{/isEmptyNull}},{{/equal}}{{/equal}}
+		{{/each}}
+	);
+
+	$obj = makeQuery("INSERT INTO {{lowercase ../resource._entity.name}} (_id{{#each ../resource._entity._attrs}}, {{name}}{{/each}} {{#each ../resource._relations}}{{#equal type '1:m'}}{{#equal _ent1.name ../../resource._entity.name}}, {{name}} {{/equal}}{{/equal}}{{/each}})  VALUES ( null{{#each ../resource._entity._attrs}}, :{{name}}{{#isNotLast ../../resource._entity._attrs @index}}{{/isNotLast}}{{/each}} {{#each ../resource._relations}}{{#equal type '1:m'}}{{#equal _ent1.name ../../resource._entity.name}}, :{{name}} {{/equal}}{{/equal}}{{/each}}  )", $params, false);
+    {{#each ../resource._relations}}
+    {{#equal type "m:m"}}{{#equal _ent1.name ../../resource/name}}
+    
+	// Delete not in array
+	$in = " and id_{{_ent2.name}} NOT IN (:{{name}})";
+	$sql = "DELETE FROM {{_ent1.name}}_{{name}} WHERE id_{{_ent1.name}}=:id_{{_ent1.name}} ";
+		
+	$params = array (
+		'id_{{_ent1.name}}'	=> $obj['id']
+	);
+	
+	if (isset($body->{{name}}) && $body->{{name}} != null && sizeOf($body->{{name}}) > 0) {
+		$sql = $sql.$in;
+		$params['{{name}}'] = join("', '", $body->{{name}});
+	}
+	
+	makeQuery($sql, $params, false);
+	
+	
+	// Get actual
+	$sql="SELECT id_{{_ent2.name}} FROM {{_ent1.name}}_{{name}} WHERE id_{{_ent1.name}}=:id";
+	$params = array (
+		'id'	=> $obj['id'],
+	);
+    $actual = makeQuery($sql, $params, false);
+	$actualArray=[];
+	foreach ($actual as $val) {
+		array_push($actualArray, $val->id_{{_ent2.name}});
+	}
+
+	// Insert new
+	if (isset($body->{{name}})) {
+    	foreach ($body->{{name}} as $id_{{_ent2.name}}) {
+    		if (!in_array($id_{{_ent2.name}}, $actualArray)){
+    			$sql = "INSERT INTO {{_ent1.name}}_{{name}} (_id, id_{{_ent1.name}}, id_{{_ent2.name}} ) VALUES (null, :id_{{_ent1.name}}, :id_{{_ent2.name}})";
+    
+    			$params = array (
+    				'id_{{_ent1.name}}'	=> $obj['id'],
+    				'id_{{_ent2.name}}'	=> $id_{{_ent2.name}}
+    			);
+        		makeQuery($sql, $params, false);
+    		}
+    	}
+	}
+	
+	{{/equal}}{{/equal}}{{/each}}
+	
+	echo json_encode($body);
+	
+});
+	{{/equal}}
+	{{#startWith crudAction 'findBy'}}
+
+//CRUD - FIND BY {{#subStr name 6 }}{{/subStr}}
+
+$app->get('{{../resource.url}}{{#editUrlParam url}}{{/editUrlParam}}',	function ($key) use ($app){	
+
+	$params = array (
+		'key'	=> $key,
+	);
+	makeQuery("SELECT * FROM {{lowercase ../resource._entity.name}} WHERE {{#subStr name 6 }}{{/subStr}} = :key", $params);
+	
+});
+	{{/startWith}}
+{{/each}}
+
+
+/*
+ * CUSTOM SERVICES
+ *
+ *	These services will be overwritten and implemented in  {{name}}Custom.js
+ */
+
+{{#each resource._services}}
+	{{#equal crudAction null}}
+
+/*
+ Name: {{name}}
+ Description: {{description}}
+ Params: {{#each _params}}
+ {{type}} {{name}} - {{description}}{{/each}}
+ */
+$app->{{lowercase method}}('{{../resource.url}}{{#editUrlParam url}}{{/editUrlParam}}',	function ($key) use ($app){	
+	makeQuery("SELECT 'ok' FROM DUAL");
+});
+	
+	{{/equal}}
+{{/each}}
+			
+?>

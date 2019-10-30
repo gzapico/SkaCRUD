@@ -1,0 +1,60 @@
+<!-- IMPORT MODULE DETAIL -->
+<!-- /IMPORT MODULE DETAIL -->
+<div ng-controller="{{module.name}}Controller">
+	
+	<h1>{{module.name}}</h1>
+	
+	<!-- SEARCH FORM -->
+	<div class="well">
+	    <form name="form_search" class="container-fluid">
+			{{#each crudResource._entity._attrs}}
+			<div class="row">
+				<div class="col-sm-3">
+					<label for="{{name}}">{{#firstUpperCase name}}{{/firstUpperCase}}</label>
+				</div>
+				<div class="col-sm-9 form-group" >
+					{{#notEmpty _enum}}
+					<select class="form-control" ng-model="search.{{name}}" name="{{name}}" id="{{name}}">
+						<option></option>
+						{{#each _enum}}
+						<option value="{{name}}">{{name}}</option>
+						{{/each}}
+					</select>
+					{{/notEmpty}}
+					{{#isEmptyNull _enum}}
+					<input type="{{#equal type 'Boolean'}}checkbox{{/equal}}{{#equal type 'Date'}}date{{/equal}}{{#equal type 'Number'}}number{{/equal}}{{#equal type 'Integer'}}number{{/equal}}{{#notEqual type 'Boolean'}}{{#notEqual type 'Integer'}}{{#notEqual type 'Date'}}{{#notEqual type 'Number'}}text{{/notEqual}}{{/notEqual}}{{/notEqual}}{{/notEqual}}" ng-model="search.{{name}}" class="form-control" name="{{name}}" id="{{name}}" >
+					{{/isEmptyNull}}
+				</div>
+			</div>
+			{{/each}}
+		</form>
+	</div>
+	
+	<!-- TABLE -->
+	<table class="table table-condensed table-striped table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>_id</th>
+			{{#each crudResource._entity._attrs}}
+				<th>{{name}}</th>
+			{{/each}}
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in list | filter: { {{#each crudResource._entity._attrs}} {{name}}:{{#equal type 'Date'}}dateFilter({{/equal}}search.{{name}}{{#equal type 'Date'}}){{/equal}}, {{/each}} }">
+				<td ng-bind="item._id" ng-link="{{linkUrl}}\{{item._id}}"></td>
+			{{#each crudResource._entity._attrs}}
+				<td ng-bind="item.{{name}}{{#equal type 'Date'}} | date{{/equal}}"></td>
+			{{/each}}
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="mb-20" ng-if="list.$resolved && (list | filter :{  {{#each crudResource._entity._attrs}} {{name}}:{{#equal type 'Date'}}dateFilter({{/equal}}search.{{name}}{{#equal type 'Date'}}){{/equal}}, {{/each}} }).length == 0">
+        <b>No result found</b>
+    </div>
+
+	<!-- BUTTON -->
+	<button class="btn btn-primary" ng-link="{{linkUrl}}new">New</button>
+	
+</div>

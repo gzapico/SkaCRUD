@@ -1,0 +1,43 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "oneTime",
+    "_partials": []
+}
+**** END PROPERTIES SKAFFOLDER ****
+# Docker-compose version
+version: '3'
+
+# Define the services/containers to be run
+services:
+      
+  # Database
+  database:
+    # image to build container from
+    image: mysql:5.7.24 
+    ports:
+      - "27018:27017"
+    networks:
+      - backend_network
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    volumes:{{#each dbs}}
+       - ./api/db/db_{{name}}_Schema.sql:/docker-entrypoint-initdb.d/db_{{name}}_Schema.sql{{/each}}
+  
+  # Backend
+  backend: 
+    # directory of Dockerfile
+    build: ./api
+    ports:
+      - "3000:3000"
+    # link this service to database service
+    links:
+      - database 
+    environment:
+      - DB_HOST=database
+    networks:
+      - backend_network
+    depends_on:
+      - database
+
+networks:
+  backend_network:

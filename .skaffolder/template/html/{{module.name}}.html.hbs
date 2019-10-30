@@ -1,0 +1,39 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "module",
+    "_partials": [
+        {
+            "name": "Partial Comment",
+            "tagFrom": "<!-- IMPORT MODULE DETAIL -->",
+            "tagTo": "<!-- /IMPORT MODULE DETAIL -->",
+            "template": "<!-- \n\n\tModule : \t{{module.name}}\n\t\n\tLinks : \t{{#each module._links}}{{name}}\n\t\t\t\t\t{{url}}\n.\t\t\t\t{{/each}}\n\t\n\tNesteds : \t{{#each module._nesteds}}{{name}}\n\t\t\t\t\t{{url}}\n.\t\t\t\t{{/each}}\n\t\t\t\t\n-->"
+        }
+    ]
+}
+**** END PROPERTIES SKAFFOLDER ****
+{{#notEqual module.name 'Home'}}
+<!-- IMPORT MODULE DETAIL -->
+<!-- /IMPORT MODULE DETAIL -->
+{{/notEqual}}
+{{#equal module.name 'Home'}}
+<h2>Home</h2>
+
+<h3>Sitemap</h3>
+{{/equal}}
+{{#notEqual module.name 'Home'}}
+<div ng-controller="{{module.name}}Controller">
+	
+<h1>{{module.name}}</h1>
+{{/notEqual}}
+	
+	
+	{{#each module._links}}
+		<div ng-link="{{url}}">Link to {{name}}</div>
+	{{/each}}
+	
+	{{#each module._nesteds}}
+		<div>#import {{name}}</div>
+		<div ng-include="'./html/{{name}}.html'"> </div>
+	{{/each}}
+	
+</div>

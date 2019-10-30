@@ -1,0 +1,144 @@
+<!-- IMPORT MODULE DETAIL -->
+<!-- /IMPORT MODULE DETAIL -->
+<div ng-controller="{{module.name}}Controller">
+	
+	<h1>
+		<span>{{module.name}}</span>
+		\{{obj.name}}
+	</h1>
+	
+	
+	
+	<div class="well">
+		<form name="skaffolderForm" class="container-fluid mt-20">
+			{{#each crudResource._entity._attrs}}
+			<div class="row">
+				<div class="col-sm-3">
+					<label for="{{name}}">{{#firstUpperCase name}}{{/firstUpperCase}}</label>
+				</div>
+				<div class="col-sm-9 form-group" ng-class="{ 'has-error' : skaffolderForm.{{name}}.$invalid }">
+					{{#notEmpty _enum}}
+					<select class="form-control" ng-model="obj.{{name}}" name="{{name}}" id="{{name}}" {{#notEmpty required}}required{{/notEmpty}}>
+						{{#each _enum}}
+						<option value="{{name}}">{{name}}</option>
+						{{/each}}
+					</select>
+					{{/notEmpty}}
+					{{#isEmptyNull _enum}}
+					<input {{#equal type 'Date'}}string-to-date{{/equal}}{{#equal type 'Number'}}string-to-number{{/equal}} type="{{#equal type 'Boolean'}}checkbox{{/equal}}{{#equal type 'Date'}}date{{/equal}}{{#equal type 'Number'}}number{{/equal}}{{#equal type 'Integer'}}number{{/equal}}{{#notEqual type 'Boolean'}}{{#notEqual type 'Integer'}}{{#notEqual type 'Date'}}{{#notEqual type 'Number'}}text{{/notEqual}}{{/notEqual}}{{/notEqual}}{{/notEqual}}" ng-model="obj.{{name}}" {{#equal type 'Date'}}ng-value="obj.{{name}}|date:'yyyy-MM-dd'"{{/equal}} class="form-control" name="{{name}}" id="{{name}}" {{#notEmpty required}}required{{/notEmpty}}>
+					{{/isEmptyNull}}
+		 			{{#notEmpty required}}<p ng-show="skaffolderForm.{{name}}.$invalid" class="help-block">Value is required</p>{{/notEmpty}}
+				</div>
+			</div>
+			{{/each}}
+			
+			
+			{{#notEmpty crudResource._relations}}
+			<h2>Relations</h2>
+			{{/notEmpty}}
+			{{#each crudResource._relations}}
+				{{#equal _ent1._id ../crudResource._entity._id}}
+					{{#equal type 'm:m'}}
+			<div class="row">
+				<div class="col-sm-3">
+					<label for="{{name}}">
+						{{name}}
+						
+				 		<span class="dropdown">
+							<div role="button" data-toggle="dropdown" class="btn btn-xxs">
+								<i class="glyphicon glyphicon-plus green"></i>
+							</div>
+				            
+				    		<ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+				              
+				              <li ng-repeat="item in list_{{_ent2._resource.name}}" ng-class="{disabled: contain_{{_ent2._resource.name}}(item._id)}" >
+				                <a tabindex="-1" href="#" ng-click="$event.preventDefault(); contain_{{_ent2._resource.name}}(item._id) || add_{{_ent2._resource.name}}(item._id)">\{{item._id}}</a>
+				              </li>
+	              
+				            </ul>
+				        </span>
+					</label>
+				</div>
+				<div class="col-sm-9 form-group">
+					<div ng-repeat="item in obj.{{name}} track by $index">
+						<div ng-click="remove_{{_ent2._resource.name}}($index)" class="btn btn-xxs" >
+							<i class="glyphicon glyphicon-trash"></i>
+						</div>
+						\{{item}}
+					</div>
+				</div>
+			</div>
+					{{/equal}}
+					{{#notEqual type 'm:m'}}
+			<div class="row">
+				<div class="col-sm-3">
+					<label for="{{name}}">
+						{{name}}
+					</label>
+				</div>
+				<div class="col-sm-9 form-group" ng-class="{ 'has-error' : skaffolderForm.{{name}}.$invalid }">
+					<select ng-model="obj.{{name}}" class="form-control" name="{{name}}" id="{{name}}" {{#notEmpty required}}required{{/notEmpty}} >
+						<option ng-repeat="item in list_{{_ent2._resource.name}}"  value="\{{item._id}}">\{{item._id}}</option>
+					</select>
+		 			{{#notEmpty required}}<p ng-show="skaffolderForm.{{name}}.$invalid" class="help-block">Value is required</p>{{/notEmpty}}
+				</div>
+			</div>
+					{{/notEqual}}
+				{{/equal}}
+			{{/each}}
+			
+			
+			{{#notEmpty crudResource._relations}}
+			<h2>External Relations</h2>
+			{{/notEmpty}}
+			
+			{{#each crudResource._relations}}
+				{{#notEqual _ent1._id ../crudResource._entity._id}}
+			<div class="row">
+				<div class="col-sm-3">
+					<label for="_{{_ent1._resource.name}}{{name}}">
+						_{{_ent1._resource.name}}{{name}}
+					</label>
+				</div>
+				<div class="col-sm-9 form-group" >
+					<div ng-repeat="item in external._{{_ent1._resource.name}}{{name}} track by $index">
+						\{{item._id}}
+					</div>
+				</div>
+			</div>
+				{{/notEqual}}
+			{{/each}}
+	
+			<div class="row mt-40">
+				<button ng-if="obj._id" class="btn btn-danger" data-toggle="modal" data-target="#removeModal">
+					<i class="glyphicon glyphicon-trash"></i> Remove
+				</button>
+				
+				<button type="submit" class="btn btn-primary pull-right" ng-disabled="skaffolderForm.$invalid" ng-click="save()">Save</button>
+			    <button class="btn btn-link pull-right" ng-link="{{linkUrl}}">Back to List</button>
+			</div>
+			<div class="clearfix"></div>
+		</form>
+		
+	</div>
+	
+	
+	<!-- MODAL REMOVE -->
+	<div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Delete item</h4>
+				</div>
+				<div class="modal-body">
+					Do you want confirm delete? {{removeItem}}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">NO</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="remove()">YES</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

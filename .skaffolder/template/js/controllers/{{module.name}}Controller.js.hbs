@@ -1,0 +1,29 @@
+**** PROPERTIES SKAFFOLDER ****
+{
+    "forEachObj": "module",
+    "_partials": [
+        {
+            "name": "Partial Used Service",
+            "tagFrom": "// START - USED SERVICES",
+            "tagTo": "// END - USED SERVICES",
+            "template": "{{#notEmpty module._services}}/*{{#each module._services}}\n *\t{{_resource.name}}Service.{{name}}\n *\t\tPARAMS: {{#each _params}}\n *\t\t\t\t\t{{type}} {{name}} {{#notEmpty description}}- {{description}}{{/notEmpty}}{{/each}}\n *\t\t{{#notEmpty returnType}}RETURN: {{returnType}}\n *\t\t\t\t{{#notEmpty returnDesc}}{{returnDesc}}{{/notEmpty}}{{/notEmpty}}\n *{{/each}}\n */{{/notEmpty}}"
+        },
+        {
+            "name": "Partial Required Resource",
+            "tagFrom": "// START - REQUIRED RESOURCES",
+            "tagTo": "// END - REQUIRED RESOURCES",
+            "template": "{{#notEmpty module._resources}}/*{{#each module._resources}}\n * {{name}}Service  {{/each}}\n */{{/notEmpty}}"
+        }
+    ]
+}
+**** END PROPERTIES SKAFFOLDER ****
+// START - USED SERVICES		
+// END - USED SERVICES
+
+// START - REQUIRED RESOURCES		
+// END - REQUIRED RESOURCES
+
+app.controller('{{module.name}}Controller', ['$scope'{{#each module._resources}}, '{{name}}Service'{{/each}},
+    function ($scope{{#each module._resources}}, {{name}}Service {{/each}}) {
+		
+}]);
