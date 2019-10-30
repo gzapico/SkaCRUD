@@ -110,6 +110,348 @@ paths:
           description: OK
                 
 
+  #-----  Artist  -----
+  /artist/:
+    post:
+      x-skaffolder-id: 5db9b16ebf13b4151b345bd1
+      x-skaffolder-name: create
+      x-skaffolder-id-resource: 5db9b123bf13b4151b345bb0
+      x-skaffolder-resource: Artist
+      x-skaffolder-crudAction: create
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION create
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /
+      x-skaffolder-roles: []
+      summary: CRUD ACTION create
+      tags:
+        - Artist
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                artist:
+                  type: string
+                is_active:
+                  type: boolean
+                is_band:
+                  type: boolean
+    get:
+      x-skaffolder-id: 5db9b156bf13b4151b345bc3
+      x-skaffolder-name: list
+      x-skaffolder-id-resource: 5db9b123bf13b4151b345bb0
+      x-skaffolder-resource: Artist
+      x-skaffolder-crudAction: list
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION list
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /
+      x-skaffolder-roles: []
+      summary: CRUD ACTION list
+      tags:
+        - Artist
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Artist"
+    
+  /artist/{id}:
+    delete:
+      x-skaffolder-id: 5db9b16ebf13b4151b345bd6
+      x-skaffolder-name: delete
+      x-skaffolder-id-resource: 5db9b123bf13b4151b345bb0
+      x-skaffolder-resource: Artist
+      x-skaffolder-crudAction: delete
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION delete
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /{id}
+      x-skaffolder-roles: []
+      summary: CRUD ACTION delete
+      tags:
+        - Artist
+      parameters:
+        - name: id
+          x-skaffolder-type: ObjectId
+          in: path
+          description: Id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+    get:
+      x-skaffolder-id: 5db9b16ebf13b4151b345bce
+      x-skaffolder-name: get
+      x-skaffolder-id-resource: 5db9b123bf13b4151b345bb0
+      x-skaffolder-resource: Artist
+      x-skaffolder-crudAction: get
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION get
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /{id}
+      x-skaffolder-roles: []
+      summary: CRUD ACTION get
+      tags:
+        - Artist
+      parameters:
+        - name: id
+          x-skaffolder-type: ObjectId
+          in: path
+          description: Id resource
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+    post:
+      x-skaffolder-id: 5db9b16ebf13b4151b345bd0
+      x-skaffolder-name: update
+      x-skaffolder-id-resource: 5db9b123bf13b4151b345bb0
+      x-skaffolder-resource: Artist
+      x-skaffolder-crudAction: update
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION update
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /{id}
+      x-skaffolder-roles: []
+      summary: CRUD ACTION update
+      tags:
+        - Artist
+      parameters:
+        - name: id
+          x-skaffolder-type: ObjectId
+          in: path
+          description: Id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Artist"
+    
+  #-----  Record  -----
+  /record/:
+    post:
+      x-skaffolder-id: 5db9b156bf13b4151b345bc1
+      x-skaffolder-name: create
+      x-skaffolder-id-resource: 5db9b14dbf13b4151b345bb9
+      x-skaffolder-resource: Record
+      x-skaffolder-crudAction: create
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION create
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /
+      x-skaffolder-roles: []
+      summary: CRUD ACTION create
+      tags:
+        - Record
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                record:
+                  type: string
+    get:
+      x-skaffolder-id: 5db9b156bf13b4151b345bc5
+      x-skaffolder-name: list
+      x-skaffolder-id-resource: 5db9b14dbf13b4151b345bb9
+      x-skaffolder-resource: Record
+      x-skaffolder-crudAction: list
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION list
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /
+      x-skaffolder-roles: []
+      summary: CRUD ACTION list
+      tags:
+        - Record
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Record"
+    
+  /record/{id}:
+    delete:
+      x-skaffolder-id: 5db9b156bf13b4151b345bc6
+      x-skaffolder-name: delete
+      x-skaffolder-id-resource: 5db9b14dbf13b4151b345bb9
+      x-skaffolder-resource: Record
+      x-skaffolder-crudAction: delete
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION delete
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /{id}
+      x-skaffolder-roles: []
+      summary: CRUD ACTION delete
+      tags:
+        - Record
+      parameters:
+        - name: id
+          x-skaffolder-type: ObjectId
+          in: path
+          description: Id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+    get:
+      x-skaffolder-id: 5db9b156bf13b4151b345bc0
+      x-skaffolder-name: get
+      x-skaffolder-id-resource: 5db9b14dbf13b4151b345bb9
+      x-skaffolder-resource: Record
+      x-skaffolder-crudAction: get
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION get
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /{id}
+      x-skaffolder-roles: []
+      summary: CRUD ACTION get
+      tags:
+        - Record
+      parameters:
+        - name: id
+          x-skaffolder-type: ObjectId
+          in: path
+          description: Id resource
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+    post:
+      x-skaffolder-id: 5db9b156bf13b4151b345bbe
+      x-skaffolder-name: update
+      x-skaffolder-id-resource: 5db9b14dbf13b4151b345bb9
+      x-skaffolder-resource: Record
+      x-skaffolder-crudAction: update
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION update
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /{id}
+      x-skaffolder-roles: []
+      summary: CRUD ACTION update
+      tags:
+        - Record
+      parameters:
+        - name: id
+          x-skaffolder-type: ObjectId
+          in: path
+          description: Id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Record"
+    
+  /record/findByartist/{key}:
+    get:
+      x-skaffolder-id: 5db9b16ebf13b4151b345bd3
+      x-skaffolder-name: findByartist
+      x-skaffolder-id-resource: 5db9b14dbf13b4151b345bb9
+      x-skaffolder-resource: Record
+      x-skaffolder-crudAction: findByartist
+      x-skaffolder-crudType: 
+      x-skaffolder-description: CRUD ACTION findByartist
+      x-skaffolder-returnDesc: 
+      x-skaffolder-returnType: 
+      x-skaffolder-url: /findByartist/{key}
+      x-skaffolder-roles: []
+      summary: CRUD ACTION findByartist
+      tags:
+        - Record
+      parameters:
+        - name: key
+          x-skaffolder-type: Objectid
+          in: path
+          description: Id della risorsa artist da cercare
+          required: true
+          schema:
+            type: Objectid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Record"
+    
   #-----  User  -----
   /user/{id}/changePassword:
     post:
@@ -312,6 +654,59 @@ components:
   schemas:
         
 
+    Artist:
+      x-skaffolder-id: 5db9b123bf13b4151b345bb0
+      x-skaffolder-id-db: 5db9afe0bf13b4151b345afa
+      x-skaffolder-id-entity: 5db9b123bf13b4151b345bac
+      x-skaffolder-url: /artist
+      properties:
+        _id:
+          type: string
+          x-skaffolder-required: true
+        artist:
+          type: string
+          x-skaffolder-id-attr: 5db9b123bf13b4151b345bad
+          x-skaffolder-type: String
+          x-skaffolder-unique: 
+          x-skaffolder-required: true
+        is_active:
+          type: boolean
+          x-skaffolder-id-attr: 5db9b123bf13b4151b345baf
+          x-skaffolder-type: Boolean
+        is_band:
+          type: boolean
+          x-skaffolder-id-attr: 5db9b123bf13b4151b345bae
+          x-skaffolder-type: Boolean
+      x-skaffolder-relations: 
+      required:
+        - _id
+        - artist
+      
+    
+    Record:
+      x-skaffolder-id: 5db9b14dbf13b4151b345bb9
+      x-skaffolder-id-db: 5db9afe0bf13b4151b345afa
+      x-skaffolder-id-entity: 5db9b14dbf13b4151b345bb6
+      x-skaffolder-url: /record
+      properties:
+        _id:
+          type: string
+          x-skaffolder-required: true
+        record:
+          type: string
+          x-skaffolder-id-attr: 5db9b14dbf13b4151b345bb7
+          x-skaffolder-type: String
+          x-skaffolder-required: true
+      x-skaffolder-relations: 
+        artist:
+          x-skaffolder-type: 1:m
+          x-skaffolder-ent1: 5db9b14dbf13b4151b345bb6
+          x-skaffolder-ent2: 5db9b123bf13b4151b345bac
+      required:
+        - _id
+        - record
+      
+    
     User:
       x-skaffolder-id: 5db9afe1bf13b4151b345b03
       x-skaffolder-id-db: 5db9afe0bf13b4151b345afa
@@ -362,6 +757,31 @@ components:
 
   # Pages
   x-skaffolder-page:
+    - x-skaffolder-id: 5db9b16ebf13b4151b345bcd
+      x-skaffolder-name: ArtistEdit
+      x-skaffolder-url: /artists/{id}
+      x-skaffolder-template: Edit_Crud
+      x-skaffolder-resource: 5db9b123bf13b4151b345bb0
+      x-skaffolder-services: 
+        - 5db9b16ebf13b4151b345bd1
+        - 5db9b16ebf13b4151b345bd3
+        - 5db9b16ebf13b4151b345bce
+        - 5db9b16ebf13b4151b345bd0
+      x-skaffolder-nesteds: 
+      x-skaffolder-links: 
+      x-skaffolder-roles: []
+    - x-skaffolder-id: 5db9b16ebf13b4151b345bd5
+      x-skaffolder-name: ArtistList
+      x-skaffolder-url: /artists
+      x-skaffolder-template: List_Crud
+      x-skaffolder-resource: 5db9b123bf13b4151b345bb0
+      x-skaffolder-services: 
+        - 5db9b16ebf13b4151b345bd6
+        - 5db9b156bf13b4151b345bc3
+      x-skaffolder-nesteds: 
+      x-skaffolder-links: 
+        - 5db9b16ebf13b4151b345bcd
+      x-skaffolder-roles: []
     - x-skaffolder-id: 5db9afe0bf13b4151b345b02
       x-skaffolder-name: Home
       x-skaffolder-url: /home
@@ -370,4 +790,56 @@ components:
       x-skaffolder-services: 
       x-skaffolder-nesteds: 
       x-skaffolder-links: 
+        - 5db9b156bf13b4151b345bc4
+        - 5db9b169bf13b4151b345bcc
+        - 5db9b16ebf13b4151b345bd5
+      x-skaffolder-roles: []
+    - x-skaffolder-id: 5db9b156bf13b4151b345bbd
+      x-skaffolder-name: RecordEdit
+      x-skaffolder-url: /records/{id}
+      x-skaffolder-template: Edit_Crud
+      x-skaffolder-resource: 5db9b14dbf13b4151b345bb9
+      x-skaffolder-services: 
+        - 5db9b156bf13b4151b345bc1
+        - 5db9b156bf13b4151b345bc0
+        - 5db9b156bf13b4151b345bc3
+        - 5db9b156bf13b4151b345bbe
+      x-skaffolder-nesteds: 
+      x-skaffolder-links: 
+      x-skaffolder-roles: []
+    - x-skaffolder-id: 5db9b156bf13b4151b345bc4
+      x-skaffolder-name: RecordList
+      x-skaffolder-url: /records
+      x-skaffolder-template: List_Crud
+      x-skaffolder-resource: 5db9b14dbf13b4151b345bb9
+      x-skaffolder-services: 
+        - 5db9b156bf13b4151b345bc6
+        - 5db9b156bf13b4151b345bc5
+      x-skaffolder-nesteds: 
+      x-skaffolder-links: 
+        - 5db9b156bf13b4151b345bbd
+      x-skaffolder-roles: []
+    - x-skaffolder-id: 5db9b169bf13b4151b345bcb
+      x-skaffolder-name: UserEdit
+      x-skaffolder-url: /users/{id}
+      x-skaffolder-template: Edit_Crud
+      x-skaffolder-resource: 5db9afe1bf13b4151b345b03
+      x-skaffolder-services: 
+        - 5db9afe1bf13b4151b345b06
+        - 5db9afe1bf13b4151b345b09
+        - 5db9afe1bf13b4151b345b0b
+      x-skaffolder-nesteds: 
+      x-skaffolder-links: 
+      x-skaffolder-roles: []
+    - x-skaffolder-id: 5db9b169bf13b4151b345bcc
+      x-skaffolder-name: UserList
+      x-skaffolder-url: /users
+      x-skaffolder-template: List_Crud
+      x-skaffolder-resource: 5db9afe1bf13b4151b345b03
+      x-skaffolder-services: 
+        - 5db9afe1bf13b4151b345b07
+        - 5db9afe1bf13b4151b345b0d
+      x-skaffolder-nesteds: 
+      x-skaffolder-links: 
+        - 5db9b169bf13b4151b345bcb
       x-skaffolder-roles: []

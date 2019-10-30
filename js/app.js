@@ -41,8 +41,44 @@ var app = angular.module('SkaCRUD_App', [
 //DO NOT EDIT THIS ROUTES, USE NEXT COMMENT SECTION
 
 // START - ROUTE
+	.when('/artists/:id', {
+	  templateUrl: 'html/ArtistEdit.html',
+	  resolve: {
+		  user: ["AuthenticationService", function(AuthenticationService) { return AuthenticationService.isAuthenticated(); }]
+	  },
+	})
+	.when('/artists', {
+	  templateUrl: 'html/ArtistList.html',
+	  resolve: {
+		  user: ["AuthenticationService", function(AuthenticationService) { return AuthenticationService.isAuthenticated(); }]
+	  },
+	})
 	.when('/home', {
 	  templateUrl: 'html/Home.html',
+	  resolve: {
+		  user: ["AuthenticationService", function(AuthenticationService) { return AuthenticationService.isAuthenticated(); }]
+	  },
+	})
+	.when('/records/:id', {
+	  templateUrl: 'html/RecordEdit.html',
+	  resolve: {
+		  user: ["AuthenticationService", function(AuthenticationService) { return AuthenticationService.isAuthenticated(); }]
+	  },
+	})
+	.when('/records', {
+	  templateUrl: 'html/RecordList.html',
+	  resolve: {
+		  user: ["AuthenticationService", function(AuthenticationService) { return AuthenticationService.isAuthenticated(); }]
+	  },
+	})
+	.when('/users/:id', {
+	  templateUrl: 'html/UserEdit.html',
+	  resolve: {
+		  user: ["AuthenticationService", function(AuthenticationService) { return AuthenticationService.isAuthenticated(); }]
+	  },
+	})
+	.when('/users', {
+	  templateUrl: 'html/UserList.html',
 	  resolve: {
 		  user: ["AuthenticationService", function(AuthenticationService) { return AuthenticationService.isAuthenticated(); }]
 	  },

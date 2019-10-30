@@ -9,6 +9,32 @@ USE `skacrud_db`;
 -- ENTITIES
 
 --
+-- Struttura della tabella `artist`
+--
+
+CREATE TABLE IF NOT EXISTS `artist` (
+	`artist` varchar(130)  NOT NULL,
+	`is_active` bool ,
+	`is_band` bool ,
+	
+	`_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT 
+
+);
+
+
+--
+-- Struttura della tabella `record`
+--
+
+CREATE TABLE IF NOT EXISTS `record` (
+	`record` varchar(130)  NOT NULL,
+	
+	`_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT 
+
+);
+
+
+--
 -- Struttura della tabella `user`
 --
 
@@ -45,5 +71,8 @@ INSERT INTO `skacrud_db`.`roles` (`role`, `_user`, `_id`) VALUES ('ADMIN', '1', 
 
 
 
+
+-- relation 1:m artist Record - Artist
+ALTER TABLE `record` ADD COLUMN `artist` int(11)  REFERENCES artist(_id);
 
 

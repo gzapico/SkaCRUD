@@ -60,6 +60,9 @@
 						
 						<!-- START LINK MENU -->
 
+                        <li><a ng-href="#/artists">Artist</a></li>
+                        <li><a ng-href="#/records">Record</a></li>
+                        <li><a ng-href="#/users">User</a></li>
                     
                     	<!-- END LINK MENU -->
 					</ul>
@@ -114,13 +117,25 @@
     
 	    <!-- START IMPORT SERVICES -->
 
+		<script src="./js/services/ArtistService.js"></script>
+		<script src="./js/services/custom/ArtistCustomService.js"></script>
+
+		<script src="./js/services/RecordService.js"></script>
+		<script src="./js/services/custom/RecordCustomService.js"></script>
+
 		<script src="./js/services/UserService.js"></script>
 		<script src="./js/services/custom/UserCustomService.js"></script>
 
     	<!-- END IMPORT SERVICES -->
 	    
 	    <!-- START IMPORT CONTROLLERS -->
+		<script src="./js/controllers/ArtistEditController.js"></script>
+		<script src="./js/controllers/ArtistListController.js"></script>
 		<script src="./js/controllers/HomeController.js"></script>
+		<script src="./js/controllers/RecordEditController.js"></script>
+		<script src="./js/controllers/RecordListController.js"></script>
+		<script src="./js/controllers/UserEditController.js"></script>
+		<script src="./js/controllers/UserListController.js"></script>
     	<!-- END IMPORT CONTROLLERS -->
 		
 	    <!-- START IMPORT DIRECTIVES -->
