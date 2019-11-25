@@ -299,6 +299,8 @@ paths:
               properties:
                 record:
                   type: string
+                release_date:
+                  type: integer
     get:
       x-skaffolder-id: 5db9b156bf13b4151b345bc5
       x-skaffolder-name: list
@@ -697,6 +699,10 @@ components:
           x-skaffolder-id-attr: 5db9b14dbf13b4151b345bb7
           x-skaffolder-type: String
           x-skaffolder-required: true
+        release_date:
+          type: integer
+          x-skaffolder-id-attr: 5ddbb6d7c758666a717074e9
+          x-skaffolder-type: Date
       x-skaffolder-relations: 
         artist:
           x-skaffolder-type: 1:m

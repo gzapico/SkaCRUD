@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `artist` (
 
 CREATE TABLE IF NOT EXISTS `record` (
 	`record` varchar(130)  NOT NULL,
+	`release_date` date ,
 	
 	`_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT 
 

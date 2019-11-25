@@ -41,6 +41,9 @@
 			type: 'String', 
 			required : true
 		},
+		release_date: {
+			type: 'Date'
+		},
 		//RELAZIONI
 		
 		
@@ -68,11 +71,12 @@ $app->post('/record',	function () use ($app){
 	
 	$params = array (
 		'record'	=> $body->record,
+		'release_date'	=> isset($body->release_date)?$body->release_date:'',
 		
 		'artist' => isset($body->artist)?$body->artist:'',
 	);
 
-	$obj = makeQuery("INSERT INTO record (_id, record , artist )  VALUES ( null, :record , :artist   )", $params, false);
+	$obj = makeQuery("INSERT INTO record (_id, record, release_date , artist )  VALUES ( null, :record, :release_date , :artist   )", $params, false);
     
 	
 	echo json_encode($body);
@@ -134,10 +138,11 @@ $app->post('/record/:id',	function ($id) use ($app){
 	$params = array (
 		'id'	=> $id,
 		'record'	    => $body->record,
+		'release_date'	    => isset($body->release_date)?$body->release_date:'',
 		'artist'      => isset($body->artist)?$body->artist:'' 
 	);
 
-	$obj = makeQuery("UPDATE record SET  record = :record  , artist=:artist  WHERE _id = :id LIMIT 1", $params, false);
+	$obj = makeQuery("UPDATE record SET  record = :record,  release_date = :release_date  , artist=:artist  WHERE _id = :id LIMIT 1", $params, false);
     
 	
 	echo json_encode($body);
